@@ -7,10 +7,14 @@ Sub CalcularAbono()
     Dim ultimaFila As Long
     Dim i As Long
     Dim filasAntesPeriodo As Integer
-    
-    limite = CInt(ActiveSheet.Range("C5").Value) 
+    Dim columnaSaldos As String
+    Dim celdaNumPlazos As String
+
+    celdaNumPlazos = "F4"
+    columnaSaldos = "I"
     entradaValida = False
     filasAntesPeriodo = 9
+    limite = CInt(ActiveSheet.Range(celdaNumPlazos).Value) 
     
     Do While Not entradaValida
         filaInput = InputBox("Selecciona el periodo (1 - " & limite & ") en el que deseas abonar:")
