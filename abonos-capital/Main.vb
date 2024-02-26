@@ -13,7 +13,6 @@ Sub CalcularAbono()
     Dim celdaNumPlazos As String
     Dim saldoCorriente As Double
 
-
     celdaNumPlazos = "F4"
     columnaSaldos = "I"
     columnaExtras = "E"
@@ -41,7 +40,7 @@ Sub CalcularAbono()
 
     Loop
 
-    saldoCorriente = CDbl(ActiveSheet.Cells(fila + 8, "H").Value)
+    saldoCorriente = CDbl(ActiveSheet.Cells((fila + filasAntesPeriodo) - 1, columnaSaldos).Value)
     
     Do While Not abonoValido
         valor = InputBox("Cantidad a abonar:")
@@ -65,4 +64,35 @@ Sub CalcularAbono()
     Utils.EliminarFilasNegativas ultimaFila, fila
 
     Utils.AjustarSaldoRestante
+
 End Sub
+
+
+Sub DeshacerCalcularAbono()
+    Dim nombreHoja As String
+    Dim nombreTemporal As String
+    
+    nombreHoja = ActiveSheet.Name
+    
+    If Not SheetExists("Macro backup") Then
+        MsgBox "La hoja 'macro backup' no existe.", vbExclamation
+        Exit Sub
+    End If
+    
+    nombreTemporal = nombreHoja & "_Temp"
+    
+    Sheets("macro backup").Copy Before:=Sheets(1)
+    Sheets(1).Name = nombreTemporal
+    
+    Application.DisplayAlerts = False 
+    Sheets(nombreHoja).Delete
+    Application.DisplayAlerts = True 
+    
+    Sheets(nombreTemporal).Name = nombreHoja
+End Sub
+
+Function SheetExists(sheetName As String) As Boolean
+    On Error Resume Next
+    SheetExists = Not Worksheets(sheetName) Is Nothing
+    On Error GoTo 0
+End Function
